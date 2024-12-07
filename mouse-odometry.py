@@ -79,12 +79,10 @@ def calculate_robot_movement(prev_frame, current_frame):
     # Calculate the average angle of flow vectors
     flow_angles = np.arctan2(flow[:,:,1], flow[:,:,0])
 
-    # Calculate total distance and movement angle
-    distance_meters = np.linalg.norm([distance_x_meters, distance_y_meters])
     # Calculate standard deviation of flow angles to estimate rotation
     rotation_radians = np.std(flow_angles)
 
-    return distance_meters, rotation_radians
+    return distance_x_meters, distance_y_meters, rotation_radians
 
 def runPipeline(image, llrobot):
     """
@@ -105,7 +103,7 @@ def runPipeline(image, llrobot):
         return image, [0, 0, 0, 0, 0, 0, 0, 0]
 
     # Calculate robot movement between previous and current frames
-    distance, rotation_radians = calculate_robot_movement(prev_frame, image)
+    distance_x, distance_y, rotation = calculate_robot_movement(prev_frame, image)
 
     # Update previous frame for next iteration
     prev_frame = image
@@ -114,6 +112,6 @@ def runPipeline(image, llrobot):
     contours, _ = cv2.findContours(prev_frame, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     
     # Prepare low-level python parameters (movement distance and angle)
-    llpython = [distance, rotation_radians, 0, 0, 0, 0, 0, 0]
+    llpython = [distance_x, distance_y, rotation, 0, 0, 0, 0, 0]
 
     return contours, image, llpython
