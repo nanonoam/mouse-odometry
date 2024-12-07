@@ -9,7 +9,7 @@ prev_frame = None
 # Field of view in degrees (horizontal, vertical)
 field_of_view = (63.3, 49.7)
 # Camera height from the ground in meters
-cam_height = 0.05
+cam_height = 0.0533
 # Camera resolution in pixels (width, height)
 cam_resolution = (640, 480)
 
